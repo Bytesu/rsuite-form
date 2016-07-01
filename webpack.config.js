@@ -22,7 +22,7 @@ module.exports = {
         loaders: [
         {
             test: /\.jsx?$/,
-            loaders: 'babel',
+            loader: 'babel',
             query: {
                 cacheDirectory: true,
                 presets: ['es2015', 'stage-0', 'react']
