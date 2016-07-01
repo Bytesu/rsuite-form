@@ -5,7 +5,10 @@ import Form from '../src/index.js';
 class FarmerJohn extends React.Component {
     render() {
         return (
-            <div>Demo</div>
+            <Form.Form onSubmit={() => console.log('submit')}>
+                <Form.Field name="username" type="text"/>
+                <Form.Field name="passwd" type="password"/>
+            </Form.Form>
         );
     }
 }
