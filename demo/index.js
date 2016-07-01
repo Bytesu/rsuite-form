@@ -8,6 +8,7 @@ class FarmerJohn extends React.Component {
             <Form.Form onSubmit={() => console.log('submit')}>
                 <Form.Field name="username" type="text"/>
                 <Form.Field name="passwd" type="password"/>
+                <Form.SubmitButton text="click to submit" />
             </Form.Form>
         );
     }
