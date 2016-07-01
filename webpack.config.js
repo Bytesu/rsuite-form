@@ -30,5 +30,8 @@ module.exports = {
             include: PATHS.src
         }
         ]
-    }
-}
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ]
+};
