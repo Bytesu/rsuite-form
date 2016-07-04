@@ -31,10 +31,14 @@ export default class Form extends React.Component {
                 React.Children.map(
                     this.props.children,
                     child => {
-                        if(child.type === SubmitButton) {
-                            return React.cloneElement(child, { onClick: () => onSubmit(formData) })
+                        switch(child.type) {
+                            case SubmitButton:
+                                return React.cloneElement(child, { onClick: () => onSubmit(formData) });
+                            case Field:
+                                return React.cloneElement(child, { onFieldChange: bindedActions.changeFieldValue });
+                            default:
+                                return child;
                         }
-                        return child;
                     }
                 )
             }
