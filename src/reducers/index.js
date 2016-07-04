@@ -6,9 +6,13 @@ const initialState = {
 
 export default function formReducer(state = initialState, action) {
     switch(action.type) {
-        case types.SUBMIT_FORM:
+        case types.CHANGE_FIELD_VALUE:
             return {
-                formData: action.data
+                ...state,
+                formData: {
+                    ...state.formData,
+                    [action.fieldName]: action.fieldValue
+                }
             };
         default:
             return state;
