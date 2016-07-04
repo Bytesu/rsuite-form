@@ -5,7 +5,7 @@ import Form from '../src/index.js';
 class FarmerJohn extends React.Component {
     render() {
         return (
-            <Form.Form onSubmit={() => console.log('submit')}>
+            <Form.Form onSubmit={(formData) => console.log(formData)}>
                 <Form.Field name="username" type="text"/>
                 <Form.Field name="passwd" type="password"/>
                 <Form.SubmitButton text="click to submit" />

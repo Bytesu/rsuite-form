@@ -32,7 +32,7 @@ export default class Form extends React.Component {
                     this.props.children,
                     child => {
                         if(child.type === SubmitButton) {
-                            return React.cloneElement(child, { onClick: this.props.onSubmit })
+                            return React.cloneElement(child, { onClick: () => onSubmit(formData) })
                         }
                         return child;
                     }
