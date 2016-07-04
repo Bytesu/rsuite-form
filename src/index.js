@@ -1,6 +1,6 @@
-import Form from './Form.js';
-import Field from './Field.js';
-import SubmitButton from './SubmitButton.js';
+import Form from './containers';
+import Field from './components/Field.js';
+import SubmitButton from './components/SubmitButton.js';
 
 export default {
     Form,
