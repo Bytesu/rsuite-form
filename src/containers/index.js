@@ -1,6 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import formReducer from '../reducers';
 import FormWrapper from './FormWrapper.js';
 
