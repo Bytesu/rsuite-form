@@ -1,9 +1,13 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import * as actions from '../actions';
 import Field from './Field.js';
 import SubmitButton from './SubmitButton.js';
 
 export default class Form extends React.Component {
     static propTypes = {
+        formData: React.PropTypes.object.isRequired,
+        dispatch: React.PropTypes.func.isRequired,
         schema: React.PropTypes.objectOf(
                     React.PropTypes.shape({
                         type: React.PropTypes.oneOf(['String', 'Number', 'Boolean']).isRequired,
@@ -15,9 +19,12 @@ export default class Form extends React.Component {
         onSubmit: React.PropTypes.func.isRequired,
         onChange: React.PropTypes.func,
         onError: React.PropTypes.func
-    }
+    };
 
     render() {
+        const { dispatch, formData, onSubmit } = this.props;
+        const bindedActions = bindActionCreators(actions, dispatch);
+
         return (
             <form>
             {
