@@ -7,9 +7,10 @@ export function submitForm(data) {
     };
 }
 
-export function changeFieldValue(value) {
+export function changeFieldValue(fieldName, fieldValue) {
     return {
         type: types.CHANGE_FIELD_VALUE,
-        value
+        fieldName,
+        fieldValue
     };
 }
