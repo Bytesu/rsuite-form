@@ -13,7 +13,7 @@ class FarmerJohn extends React.Component {
                               Form.validators.containsLetterOnly
                           ]
                       },
-            passwd: {
+            passwd:   {
                           validators: [
                               // password should at least 6 characters long and contain number, uppercase letter and lowercase letter
                               Form.validators.isString,
