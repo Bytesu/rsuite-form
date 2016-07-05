@@ -10,19 +10,18 @@ export default class Form extends React.Component {
         dispatch: React.PropTypes.func.isRequired,
         schema: React.PropTypes.objectOf(
                     React.PropTypes.shape({
-                        type: React.PropTypes.oneOf(['String', 'Number', 'Boolean']).isRequired,
+                        validators: React.PropTypes.arrayOf(React.PropTypes.func),
                         defaultValue: React.PropTypes.any,
-                        isRequired: React.PropTypes.bool,
-                        validator: React.PropTypes.arrayOf(React.PropTypes.func)
+                        isRequired: React.PropTypes.bool
                     })
-                ),
+                ).isRequired,
         onSubmit: React.PropTypes.func.isRequired,
         onChange: React.PropTypes.func,
         onError: React.PropTypes.func
     };
 
     render() {
-        const { dispatch, formData, onSubmit } = this.props;
+        const { dispatch, formData, onSubmit, schema } = this.props;
         const bindedActions = bindActionCreators(actions, dispatch);
 
         return (
@@ -35,7 +34,12 @@ export default class Form extends React.Component {
                             case SubmitButton:
                                 return React.cloneElement(child, { onClick: () => onSubmit(formData) });
                             case Field:
-                                return React.cloneElement(child, { onFieldChange: bindedActions.changeFieldValue });
+                                return React.cloneElement(child, {
+                                    key: child.props.name,
+                                    onFieldChange: bindedActions.changeFieldValue,
+                                    value: formData[child.props.name] || null,
+                                    schema: schema[child.props.name] || null
+                                });
                             default:
                                 return child;
                         }
