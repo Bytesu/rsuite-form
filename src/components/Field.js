@@ -44,7 +44,7 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const { name, type, labelText, helpText, onFieldChange } = this.props;
+        const { name, type, labelText, helpText, onFieldChange, value, schema, ...fieldControlProps } = this.props;
         const FieldControl = FieldControls[type];
         return (
             <div className="form-group">
@@ -54,6 +54,7 @@ export default class Field extends React.Component {
                     name={name}
                     onChange={this.handleFieldChange.bind(this)}
                     ref="FieldControl"
+                    {...fieldControlProps}
                 />
                 {helpText && !this.isFieldValid() && this.getHelpBlock(helpText)}
             </div>
