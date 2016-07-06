@@ -8,12 +8,10 @@ export default class Form extends React.Component {
     static propTypes = {
         formData: React.PropTypes.object.isRequired,
         dispatch: React.PropTypes.func.isRequired,
-        schema: React.PropTypes.objectOf(
-                    React.PropTypes.shape({
-                        validators: React.PropTypes.arrayOf(React.PropTypes.func),
-                        defaultValue: React.PropTypes.any
-                    })
-                ).isRequired,
+        schema: React.PropTypes.shape({
+            check: React.PropTypes.func.isRequired,
+            checkForField: React.PropTypes.func.isRequired
+        }),
         onSubmit: React.PropTypes.func.isRequired,
         onChange: React.PropTypes.func,
         onError: React.PropTypes.func
@@ -33,11 +31,12 @@ export default class Form extends React.Component {
                             case SubmitButton:
                                 return React.cloneElement(child, { onClick: () => onSubmit(formData) });
                             case Field:
+                                const { name } = child.props;
+                                const value = formData[name];
                                 return React.cloneElement(child, {
-                                    key: child.props.name,
+                                    key: name,
                                     onFieldChange: bindedActions.changeFieldValue,
-                                    value: formData[child.props.name] || null,
-                                    schema: schema[child.props.name] || null
+                                    isValid: schema.checkForField(name, value)
                                 });
                             default:
                                 return child;
