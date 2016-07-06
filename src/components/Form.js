@@ -11,8 +11,7 @@ export default class Form extends React.Component {
         schema: React.PropTypes.objectOf(
                     React.PropTypes.shape({
                         validators: React.PropTypes.arrayOf(React.PropTypes.func),
-                        defaultValue: React.PropTypes.any,
-                        isRequired: React.PropTypes.bool
+                        defaultValue: React.PropTypes.any
                     })
                 ).isRequired,
         onSubmit: React.PropTypes.func.isRequired,

@@ -1,3 +1,6 @@
+// if v is not empty
+export const isRequired = (v) => !!v && v.length > 0;
+
 // if v is number
 export const isNumber = (v) => typeof v === 'number';
 
