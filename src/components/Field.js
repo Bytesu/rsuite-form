@@ -9,8 +9,7 @@ export default class Field extends React.Component {
         labelText: React.PropTypes.string,
         helpText: React.PropTypes.string,
         onFieldChange: React.PropTypes.func,
-        value: React.PropTypes.any,
-        schema: React.PropTypes.object
+        isValid: React.PropTypes.bool
     }
 
     getLabel(labelText) {
@@ -32,20 +31,10 @@ export default class Field extends React.Component {
         onFieldChange(name, value);
     }
 
-    isFieldValid() {
-        const { value, schema } = this.props;
-        const validators = schema.validators || [];
-        for(let i = 0, len = validators.length; i < len; i++) {
-            if(!validators[i](value)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     render() {
-        const { name, type, labelText, helpText, onFieldChange, value, schema, ...fieldControlProps } = this.props;
+        const { name, type, labelText, helpText, onFieldChange, isValid, ...fieldControlProps } = this.props;
         const FieldControl = FieldControls[type];
+        console.log(isValid);
         return (
             <div className="form-group">
                 {labelText && this.getLabel(labelText)}
@@ -56,7 +45,7 @@ export default class Field extends React.Component {
                     ref="FieldControl"
                     {...fieldControlProps}
                 />
-                {helpText && !this.isFieldValid() && this.getHelpBlock(helpText)}
+                {helpText && !isValid && this.getHelpBlock(helpText)}
             </div>
         );
     }
