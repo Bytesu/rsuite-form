@@ -1,6 +1,12 @@
+import { StringType } from './types.js';
+
 class Schema {
     constructor(schema) {
         this.schema = schema;
+    }
+
+    getFieldType(fieldName) {
+        return this.schema[fieldName] || StringType();
     }
 
     checkForField(fieldName, fieldValue) {

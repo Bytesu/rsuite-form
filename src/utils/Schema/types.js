@@ -21,6 +21,10 @@ class Type {
 }
 
 class Str extends Type {
+    static from(s) {
+        return s + '';
+    }
+
     constructor(msg = 'no error message') {
         super('string');
         super.addValidator( v => typeof v === 'string', msg);
@@ -57,4 +61,4 @@ class Str extends Type {
     }
 }
 
-export const StringType  = (msg) => new Str(msg);
+export const StringType = msg => new Str(msg);

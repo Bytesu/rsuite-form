@@ -17,6 +17,11 @@ export default class Form extends React.Component {
         onError: React.PropTypes.func
     };
 
+    handleFieldChange(name, rawStringValue) {
+        let fieldType = this.props.schema.getFieldType(name);
+        let value = fieldType.from(rawStringValue);
+    }
+
     render() {
         const { dispatch, formData, onSubmit, schema } = this.props;
         const bindedActions = bindActionCreators(actions, dispatch);
@@ -36,7 +41,11 @@ export default class Form extends React.Component {
                                 const checkResult = schema.checkForField(name, value);
                                 return React.cloneElement(child, {
                                     key: name,
-                                    onFieldChange: bindedActions.changeFieldValue,
+                                    onFieldChange: (name, rawStringValue) => {
+                                        let fieldType = schema.getFieldType(name);
+                                        let value = fieldType.from(rawStringValue);
+                                        bindActionCreators.changeFieldValue(name, value);
+                                    },
                                     isValid: !checkResult.err,
                                     errMessage: checkResult.msg
                                 });

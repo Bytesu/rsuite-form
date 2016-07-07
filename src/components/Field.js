@@ -26,9 +26,9 @@ export default class Field extends React.Component {
 
     handleFieldChange(e) {
         const inputField = e.target;
-        const value = inputField.value.trim();
+        const rawStringValue = inputField.value.trim();
         const { name, onFieldChange } = this.props;
-        onFieldChange(name, value);
+        onFieldChange(name, rawStringValue);
     }
 
     render() {
