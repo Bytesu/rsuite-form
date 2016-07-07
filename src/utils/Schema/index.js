@@ -5,16 +5,19 @@ class Schema {
 
     checkForField(fieldName, fieldValue) {
         let fieldChecker = this.schema[fieldName];
+        if(!fieldChecker) {
+            return { err: false };  // fieldValue can be anything if no schema defined
+        }
         return fieldChecker.check(fieldValue);
     }
 
     check(value, cb) {
+        let checkResult = {};
         for(let fieldName in this.schema) {
             let fieldValue = value[fieldName];
-            if(!fieldValue || !checkForField(fieldName, fieldValue)) {
-                return false;
-            }
+            checkResult[fieldName] = this.checkForField(fieldName, fieldValue);
         }
+        return checkResult;
     }
 }
 

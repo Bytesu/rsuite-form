@@ -33,10 +33,12 @@ export default class Form extends React.Component {
                             case Field:
                                 const { name } = child.props;
                                 const value = formData[name];
+                                const checkResult = schema.checkForField(name, value);
                                 return React.cloneElement(child, {
                                     key: name,
                                     onFieldChange: bindedActions.changeFieldValue,
-                                    isValid: schema.checkForField(name, value)
+                                    isValid: !checkResult.err,
+                                    errMessage: checkResult.msg
                                 });
                             default:
                                 return child;

@@ -6,54 +6,55 @@ class Type {
 
     check(v) {
         for(let i = 0, len = this.validators.length; i < len; i++) {
-            let vldr = this.validators[i];
-            if(!vldr(v)) {
-                return false;
+            let { vd, msg } = this.validators[i];
+            if(!vd(v)) {
+                return { err: true, msg };
             }
         }
-        return true;
+        return { err: false };
     }
 
-    addValidator(vd) {
-        this.validators.push(vd);
+    addValidator(vd, msg) {
+        msg = msg || this.validators[0].msg;
+        this.validators.push({ vd, msg });
     }
 }
 
 class Str extends Type {
-    constructor() {
+    constructor(msg = 'no error message') {
         super('string');
-        super.addValidator( v => typeof v === 'string');
+        super.addValidator( v => typeof v === 'string', msg);
     }
 
-    isLongerThan(n) {
-        super.addValidator( v => v.length > n );
+    isLongerThan(n, msg) {
+        super.addValidator( v => v.length > n, msg );
         return this;
     }
 
-    containsLetter() {
-        super.addValidator( v => /[a-zA-Z]/.test(v) );
+    containsLetter(msg) {
+        super.addValidator( v => /[a-zA-Z]/.test(v), msg );
         return this;
     }
 
-    containsUppercaseLetter() {
-        super.addValidator( v => /[A-Z]/.test(v) );
+    containsUppercaseLetter(msg) {
+        super.addValidator( v => /[A-Z]/.test(v), msg );
         return this;
     }
 
-    containsLowercaseLetter() {
-        super.addValidator( v => /[a-z]/.test(v) );
+    containsLowercaseLetter(msg) {
+        super.addValidator( v => /[a-z]/.test(v), msg );
         return this;
     }
 
-    containsLetterOnly() {
-        super.addValidator( v => /^[a-zA-Z]+$/.test(v) );
+    containsLetterOnly(msg) {
+        super.addValidator( v => /^[a-zA-Z]+$/.test(v), msg );
         return this;
     }
 
-    containsNumber() {
-        super.addValidator( v => /[0-9]/.test(v) );
+    containsNumber(msg) {
+        super.addValidator( v => /[0-9]/.test(v), msg );
         return this;
     }
 }
 
-export const StringType  = () => new Str();
+export const StringType  = (msg) => new Str(msg);

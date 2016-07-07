@@ -7,9 +7,9 @@ export default class Field extends React.Component {
         name: React.PropTypes.string.isRequired,
         type: React.PropTypes.string.isRequired,
         labelText: React.PropTypes.string,
-        helpText: React.PropTypes.string,
         onFieldChange: React.PropTypes.func,
-        isValid: React.PropTypes.bool
+        isValid: React.PropTypes.bool,
+        errMessage: React.PropTypes.string
     }
 
     getLabel(labelText) {
@@ -32,7 +32,7 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const { name, type, labelText, helpText, onFieldChange, isValid, ...fieldControlProps } = this.props;
+        const { name, type, labelText, onFieldChange, isValid, errMessage, ...fieldControlProps } = this.props;
         const FieldControl = FieldControls[type];
         console.log(isValid);
         return (
@@ -45,7 +45,7 @@ export default class Field extends React.Component {
                     ref="FieldControl"
                     {...fieldControlProps}
                 />
-                {helpText && !isValid && this.getHelpBlock(helpText)}
+                {!isValid && this.getHelpBlock(errMessage)}
             </div>
         );
     }
