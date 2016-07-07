@@ -31,7 +31,6 @@ export default class Form extends React.Component {
                             case SubmitButton:
                                 return React.cloneElement(child, { onClick: () => onSubmit(formData) });
                             case Field:
-                                debugger;
                                 const { name } = child.props;
                                 const value = formData[name];
                                 const fieldHaveNotBeenEdited = value === undefined // value undefined means user haven't touched this field
