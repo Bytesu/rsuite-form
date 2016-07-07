@@ -61,4 +61,21 @@ class Str extends Type {
     }
 }
 
+class Num extends Type {
+    static from(n) {
+        return +n;
+    }
+
+    constructor(msg = 'no error message') {
+        super('number');
+        super.addValidator( v => typeof v === 'number' && !isNaN(v), msg );
+    }
+
+    isOneOf(numLst, msg) {
+        super.addValidator( v => v in numLst, msg);
+        return this;
+    }
+}
+
 export const StringType = msg => new Str(msg);
+export const NumberType = msg => new Num(msg);

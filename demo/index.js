@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Form from '../src/index.js';
-import { SchemaBuilder, StringType } from '../src/utils/Schema';
+import { SchemaBuilder, StringType, NumberType } from '../src/utils/Schema';
 
 class FarmerJohn extends React.Component {
     render() {
@@ -12,7 +12,8 @@ class FarmerJohn extends React.Component {
                                                        .containsNumber('password must contain numbers')
                                                        .containsLowercaseLetter('password must contain lowercase letters')
                                                        .containsUppercaseLetter('password must contain uppercase letters'),
-            bio:      StringType('bio is unvalid')
+            bio:      StringType('bio is unvalid'),
+            gender:   NumberType('gender unvalid').isOneOf([...Array(4).keys()])
         });
         return (
             <Form.Form schema={schema} onSubmit={(formData) => console.log(formData)}>
@@ -24,14 +25,10 @@ class FarmerJohn extends React.Component {
                     type="Radios"
                     options={
                         [
-                        {
-                            value: 1,
-                            text: 'male'
-                        },
-                        {
-                            value: 0,
-                            text: 'female'
-                        }
+                        { value: 0, text: 'male' },
+                        { value: 1, text: 'female' },
+                        { value: 2, text: 'both' },
+                        { value: 3, text: 'neither' }
                         ]
                     }
                 />
