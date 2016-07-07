@@ -31,8 +31,10 @@ export default class Form extends React.Component {
                             case SubmitButton:
                                 return React.cloneElement(child, { onClick: () => onSubmit(formData) });
                             case Field:
+                                debugger;
                                 const { name } = child.props;
                                 const value = formData[name];
+                                const fieldHaveNotBeenEdited = value === undefined // value undefined means user haven't touched this field
                                 const checkResult = schema.checkForField(name, value);
                                 return React.cloneElement(child, {
                                     key: name,
@@ -41,7 +43,9 @@ export default class Form extends React.Component {
                                         let value = fieldType.from(rawStringValue);
                                         bindedActions.changeFieldValue(name, value);
                                     },
-                                    isValid: !checkResult.err,
+                                    // if this field haven't been edited, error messages are not supposed to be shown.
+                                    // Set isValid true to hide error messages.
+                                    isValid: !checkResult.err || fieldHaveNotBeenEdited,
                                     errMessage: checkResult.msg
                                 });
                             default:
