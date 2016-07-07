@@ -19,6 +19,22 @@ class FarmerJohn extends React.Component {
                 <Form.Field name="username" type="PlainText" />
                 <Form.Field name="passwd" type="Password" />
                 <Form.Field name="bio" type="TextArea" placeholder="textarea placeholder"/>
+                <Form.Field
+                    name="gender"
+                    type="Radios"
+                    options={
+                        [
+                        {
+                            value: 1,
+                            text: 'male'
+                        },
+                        {
+                            value: 0,
+                            text: 'female'
+                        }
+                        ]
+                    }
+                />
                 <Form.SubmitButton text="click to submit" />
             </Form.Form>
         );

@@ -25,7 +25,7 @@ export default class Field extends React.Component {
     }
 
     handleFieldChange(e) {
-        const inputField = findDOMNode(this.refs.FieldControl);
+        const inputField = e.target;
         const value = inputField.value.trim();
         const { name, onFieldChange } = this.props;
         onFieldChange(name, value);
@@ -34,7 +34,6 @@ export default class Field extends React.Component {
     render() {
         const { name, type, labelText, onFieldChange, isValid, errMessage, ...fieldControlProps } = this.props;
         const FieldControl = FieldControls[type];
-        console.log(isValid);
         return (
             <div className="form-group">
                 {labelText && this.getLabel(labelText)}
