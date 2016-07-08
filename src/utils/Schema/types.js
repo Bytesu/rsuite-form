@@ -59,6 +59,10 @@ class Str extends Type {
         super.addValidator( v => /[0-9]/.test(v), msg );
         return this;
     }
+
+    isOneOf(strArr) {
+        return strArr.includes(strArr);
+    }
 }
 
 class Num extends Type {
