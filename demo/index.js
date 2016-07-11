@@ -25,7 +25,7 @@ class PlainText extends React.Component {
 class FarmerJohn extends React.Component {
     render() {
         const schema = SchemaBuilder({
-            data: StringType('input unvalid')
+            data: StringType('input invalid')
         });
         return (
             <Form.Form schema={schema} onSubmit={(formData) => console.log(formData)}>
