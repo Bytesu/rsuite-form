@@ -35,17 +35,19 @@ export default class Form extends React.Component {
                                 const value = formData[name];
                                 const fieldHaveNotBeenEdited = value === undefined // value undefined means user haven't touched this field
                                 const checkResult = schema.checkForField(name, value);
+                                if(fieldHaveNotBeenEdited) {
+                                    // if field haven't been edited, error messages are not supposed to be shown.
+                                    // set err false to hide error messages
+                                    checkResult.err = false;
+                                }
                                 return React.cloneElement(child, {
                                     key: name,
-                                    onFieldChange: (name, rawStringValue) => {
+                                    onFieldChange: (name, rawValue) => {
                                         let fieldType = schema.getFieldType(name).constructor;
-                                        let value = fieldType.from(rawStringValue);
+                                        let value = fieldType.from(rawValue);
                                         bindedActions.changeFieldValue(name, value);
                                     },
-                                    // if this field haven't been edited, error messages are not supposed to be shown.
-                                    // Set isValid true to hide error messages.
-                                    isValid: !checkResult.err || fieldHaveNotBeenEdited,
-                                    errMessage: checkResult.msg
+                                    checkResult
                                 });
                             default:
                                 return child;

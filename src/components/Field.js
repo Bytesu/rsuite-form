@@ -1,50 +1,64 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import * as FieldControls from './FieldControls';
 
 export default class Field extends React.Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
-        type: React.PropTypes.string.isRequired,
-        labelText: React.PropTypes.string,
         onFieldChange: React.PropTypes.func,
-        isValid: React.PropTypes.bool,
-        errMessage: React.PropTypes.string
+        checkResult: React.PropTypes.object
     }
 
-    getLabel(labelText) {
-        return (
-            <label className="control-label" for={this.props.name}> {labelText || ""} </label>
-        );
-    }
-
-    getHelpBlock(helpText) {
-        return (
-            <span className="help-block"> {helpText || ""} </span>
-        );
-    }
-
-    handleFieldChange(e) {
-        const inputField = e.target;
-        const rawStringValue = inputField.value.trim();
+    handleFieldChange(v) {
         const { name, onFieldChange } = this.props;
-        onFieldChange(name, rawStringValue);
+        onFieldChange(name, v);
+    }
+
+    getValidChildren() {
+        let validChildren = [];
+
+        // remove child which is not react element
+        React.Children.forEach(
+            this.props.children,
+            (child) => {
+                if(React.isValidElement(child)) {
+                    validChildren.push(child);
+                }
+            }
+        );
+
+        return validChildren;
+    }
+
+    getFieldControl() {
+        let validChildren = this.getValidChildren();
+
+        if(validChildren.length > 1) {
+            console.error(`One field should always contain one field control only. Duplicate field controls will be ignored. See Field #{name}`);
+        }
+
+        if(validChildren.length < 1) {
+            console.error(`No valid field control found in Field #{name}`);
+            return null; // no valid child found, return null
+        }
+
+        return validChildren[0];
     }
 
     render() {
-        const { name, type, labelText, onFieldChange, isValid, errMessage, ...fieldControlProps } = this.props;
-        const FieldControl = FieldControls[type];
+        const { name, type, labelText, onFieldChange, checkResult, children} = this.props;
+        const fieldCtrl = this.getFieldControl();
         return (
-            <div className="form-group">
-                {labelText && this.getLabel(labelText)}
-                <FieldControl
-                    id={name}
-                    name={name}
-                    onChange={this.handleFieldChange.bind(this)}
-                    ref="FieldControl"
-                    {...fieldControlProps}
-                />
-                {!isValid && this.getHelpBlock(errMessage)}
+            <div>
+            {
+                fieldCtrl && React.cloneElement(fieldCtrl, {
+                    onChange: (v) => {
+                        this.handleFieldChange(v);
+                        fieldCtrl.props.onChange && fieldCtrl.props.onChange(v); // run custom onChange callback last
+                    },
+                    isValid: !checkResult.err,
+                    errorMessage: checkResult.msg
+                })
+            }
             </div>
         );
     }
