@@ -4,7 +4,6 @@ import { findDOMNode } from 'react-dom';
 export default class Field extends React.Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
-        isRequired: React.PropTypes.bool,
         onFieldChange: React.PropTypes.func,
         checkResult: React.PropTypes.object,
         value: React.PropTypes.any
@@ -54,7 +53,7 @@ export default class Field extends React.Component {
             {
                 fieldCtrl && React.cloneElement(fieldCtrl, {
                     onChange: (v) => {
-                        this.handleFieldChange(v);
+                        onFieldChange(v);
                         fieldCtrl.props.onChange && fieldCtrl.props.onChange(v); // run custom onChange callback last
                     },
                     isValid: !checkResult.err,
@@ -66,3 +65,4 @@ export default class Field extends React.Component {
         );
     }
 }
+

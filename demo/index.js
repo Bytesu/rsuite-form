@@ -24,6 +24,18 @@ class PlainText extends React.Component {
 }
 
 class FarmerJohn extends React.Component {
+    getData() {
+        let form = this.refs.form;
+        return form.state.formData;
+    }
+
+    reset() {
+        let form = this.refs.form;
+        form.setState({
+            formData: {}
+        });
+    }
+
     render() {
         const schema = SchemaBuilder({
             data: StringType('input invalid')
@@ -31,10 +43,8 @@ class FarmerJohn extends React.Component {
         return (
             <Rsf.Form schema={schema} ref="form">
                 <Rsf.Field name="data"> <PlainText onChange={() => console.log('custom onChange()')} /> </Rsf.Field>
-                <button onClick={() => console.log(this.refs.form.getData())}>submit</button>
-                <button onClick={() => {
-                    this.refs.form.reset();
-                }}>clear</button>
+                <button onClick={() => console.log(this.getData())}>submit</button>
+                <button onClick={this.reset.bind(this)}>clear</button>
             </Rsf.Form>
         );
     }
