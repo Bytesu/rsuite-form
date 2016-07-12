@@ -22,7 +22,7 @@ export default class Form extends React.Component {
         const bindedActions = bindActionCreators(actions, dispatch);
 
         return (
-            <form>
+            <form onSubmit={(e) => e.preventDefault()}>
             {
                 React.Children.map(
                     this.props.children,
