@@ -4,6 +4,7 @@ import { findDOMNode } from 'react-dom';
 export default class Field extends React.Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
+        isRequired: React.PropTypes.bool,
         onFieldChange: React.PropTypes.func,
         checkResult: React.PropTypes.object,
         value: React.PropTypes.any

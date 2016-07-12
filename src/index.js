@@ -13,12 +13,20 @@ export default {
             this.store = createStore(reducer);
         }
 
+        isDirty() {
+            // TODO
+        }
+
         reset() {
             this.store.dispatch(actions.clear());
         }
 
         clearField(fieldName) {
             this.store.dispatch(actions.changeFieldValue(fieldName, undefined));
+        }
+
+        setField(fieldName, fieldValue) {
+            this.store.dispatch(actions.changeFieldValue(fieldName, fieldValue));
         }
 
         getData() {
