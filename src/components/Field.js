@@ -5,7 +5,8 @@ export default class Field extends React.Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        checkResult: React.PropTypes.object
+        checkResult: React.PropTypes.object,
+        value: React.PropTypes.any
     }
 
     handleFieldChange(v) {
@@ -45,7 +46,7 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const { name, type, labelText, onFieldChange, checkResult, children} = this.props;
+        const { onFieldChange, checkResult, value } = this.props;
         const fieldCtrl = this.getFieldControl();
         return (
             <div>
@@ -56,7 +57,8 @@ export default class Field extends React.Component {
                         fieldCtrl.props.onChange && fieldCtrl.props.onChange(v); // run custom onChange callback last
                     },
                     isValid: !checkResult.err,
-                    errorMessage: checkResult.msg
+                    errorMessage: checkResult.msg,
+                    value
                 })
             }
             </div>

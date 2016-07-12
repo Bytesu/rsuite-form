@@ -14,6 +14,11 @@ export default function formReducer(state = initialState, action) {
                     [action.fieldName]: action.fieldValue
                 }
             };
+        case types.CLEAR:
+            return {
+                ...state,
+                formData: {}
+            };
         default:
             return state;
     }

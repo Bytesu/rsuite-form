@@ -1,2 +1,2 @@
-export const SUBMIT_FORM = 'SUBMIT_FORM';
 export const CHANGE_FIELD_VALUE = 'CHANGE_FIELD_VALUE';
+export const CLEAR = 'CLEAR';

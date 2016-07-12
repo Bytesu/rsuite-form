@@ -8,15 +8,8 @@ export default class Form extends React.Component {
     static propTypes = {
         formData: React.PropTypes.object.isRequired,
         dispatch: React.PropTypes.func.isRequired,
-        schema:   React.PropTypes.instanceOf(Schema),
-        onSubmit: React.PropTypes.func.isRequired,
-        onChange: React.PropTypes.func,
-        onError:  React.PropTypes.func
+        schema:   React.PropTypes.instanceOf(Schema)
     };
-
-    getData() {
-        return this.props.formData;
-    }
 
     render() {
         const { dispatch, formData, onSubmit, schema } = this.props;
@@ -46,6 +39,7 @@ export default class Form extends React.Component {
                                         let value = fieldType.from(rawValue);
                                         bindedActions.changeFieldValue(name, value);
                                     },
+                                    value,
                                     checkResult
                                 });
                             default:
