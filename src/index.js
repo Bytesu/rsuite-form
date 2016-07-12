@@ -17,6 +17,10 @@ export default {
             this.store.dispatch(actions.clear());
         }
 
+        clearField(fieldName) {
+            this.store.dispatch(actions.changeFieldValue(fieldName, undefined));
+        }
+
         getData() {
             return this.store.getState()['formData'];
         }
