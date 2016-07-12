@@ -28,8 +28,6 @@ export default class Form extends React.Component {
                     this.props.children,
                     child => {
                         switch(child.type) {
-                            case SubmitButton:
-                                return React.cloneElement(child, { onClick: () => onSubmit(formData) });
                             case Field:
                                 const { name } = child.props;
                                 const value = formData[name];
