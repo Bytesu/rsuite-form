@@ -30,7 +30,6 @@ class FarmerJohn extends React.Component {
         return (
             <Form.Form schema={schema} onSubmit={(formData) => console.log(formData)}>
                 <Form.Field name="data"> <PlainText onChange={() => console.log('custom onChange()')}/> </Form.Field>
-                <Form.SubmitButton text="click to submit" />
             </Form.Form>
         );
     }

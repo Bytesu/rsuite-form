@@ -2,19 +2,16 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 import Field from './Field.js';
-import SubmitButton from './SubmitButton.js';
+import { Schema } from '../utils/Schema';
 
 export default class Form extends React.Component {
     static propTypes = {
         formData: React.PropTypes.object.isRequired,
         dispatch: React.PropTypes.func.isRequired,
-        schema: React.PropTypes.shape({
-            check: React.PropTypes.func.isRequired,
-            checkForField: React.PropTypes.func.isRequired
-        }),
+        schema:   React.PropTypes.instanceOf(Schema),
         onSubmit: React.PropTypes.func.isRequired,
         onChange: React.PropTypes.func,
-        onError: React.PropTypes.func
+        onError:  React.PropTypes.func
     };
 
     render() {

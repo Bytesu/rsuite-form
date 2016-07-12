@@ -1,6 +1,6 @@
 import { StringType } from './types.js';
 
-class Schema {
+export class Schema {
     constructor(schema) {
         this.schema = schema;
     }
