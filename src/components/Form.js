@@ -14,6 +14,10 @@ export default class Form extends React.Component {
         onError:  React.PropTypes.func
     };
 
+    getData() {
+        return this.props.formData;
+    }
+
     render() {
         const { dispatch, formData, onSubmit, schema } = this.props;
         const bindedActions = bindActionCreators(actions, dispatch);
