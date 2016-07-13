@@ -1,5 +1,7 @@
 # rsuite simple form
 
+see [no-redux branch](https://github.com/rsuite/rsuite-form/tree/no-redux)
+
 ## Example
 
 ```
