@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, findDOMNode } from 'react-dom';
-import Rsf from '../src/index.js';
+import {Form, Field} from '../src/index.js';
 import { SchemaBuilder, StringType, NumberType } from '../src/utils/Schema';
 
 const userModel = {
@@ -54,12 +54,12 @@ class FarmerJohn extends React.Component {
         });
 
         return (
-            <Rsf.Form schema={schema} formData={this.state.data} onChange={() => console.log('form changed')} ref="form">
-                <Rsf.Field name="username"> <PlainText onChange={() => console.log('custom onChange()')} /> </Rsf.Field>
-                <Rsf.Field name="email"> <PlainText onChange={() => console.log('custom onChange()')} /> </Rsf.Field>
+            <Form schema={schema} formData={this.state.data} onChange={() => console.log('form changed')} ref="form">
+                <Field name="username"> <PlainText onChange={() => console.log('custom onChange()')} /> </Field>
+                <Field name="email"> <PlainText onChange={() => console.log('custom onChange()')} /> </Field>
                 <button onClick={() => console.log(this.getData())}>submit</button>
-                <button onClick={this.reset.bind(this)}>clear</button>
-            </Rsf.Form>
+                <button onClick={this.reset.bind(this)}>reset</button>
+            </Form>
         );
     }
 }

@@ -8,7 +8,7 @@
 ## Example
 
 ```
-import rf from 'rsuite-form';
+import { Form, Field } from 'rsuite-form';
 
 render() {
     const schema = SchemaBuilder({
@@ -16,10 +16,10 @@ render() {
     });
 
     return (
-        <rf.Form schema={schema} formData={this.state.data}>
-            <rf.Field name="email"> <PlainText onChange={() => console.log('field changed')}/> </rf.Field>
+        <Form schema={schema} formData={this.state.data}>
+            <Field name="email"> <PlainText onChange={() => console.log('field changed')}/> </Field>
             <SubmitBtn />
-        </Form.Form>
+        </Form>
     );
 }
 ```
