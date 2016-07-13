@@ -1,18 +1,24 @@
-# rsuite simple form
+# rsuite form
+
+简单的表单控件, 基本只做两件事
+
+- 收集数据
+- 校验数据
 
 ## Example
 
 ```
-import Form from 'rsuite-simple-form';
+import rf from 'rsuite-form';
 
 render() {
     const schema = SchemaBuilder({
-        data: StringType('input invalid')
+        email: StringType('input invalid')
     });
+
     return (
-        <Form.Form schema={schema} onSubmit={(formData) => console.log(formData)}>
-            <Form.Field name="data"> <PlainText onChange={() => console.log('custom onChange()')}/> </Form.Field>
-            <Form.SubmitButton text="click to submit" />
+        <rf.Form schema={schema} formData={this.state.data}>
+            <rf.Field name="email"> <PlainText onChange={() => console.log('field changed')}/> </rf.Field>
+            <SubmitBtn />
         </Form.Form>
     );
 }
@@ -21,13 +27,13 @@ render() {
 ## API
 
 ### `<Form />`
-表单基础组件, 一张表单对于一个 `<Form />`
+表单基础组件, 一张表单对应一个 `<Form />`
 
 __props__
 
-- `schema:schema object` 用来校验表单数据.
-- `onSubmit:function(formData)` 当提交按钮点击时触发
-    + `formData:object` 表单数据, name 作为 key 存储 value
+- `schema:schema object` 用来校验表单数据. 请看 [rsuite-schema](https://github.com/rsuite/rsuite-schema)
+- `formData: object` 表单数据, 以每项数据的 name 作为 key 存储对应 value
+- `onChange:function` 当 formData 发生变化时自动调用该方法
 
 ### `<Field />`
 表单域组件, 一条表单数据对于一个 `<Field />`
@@ -38,7 +44,8 @@ __props__
 
 __children__
 
-输入控件作为 children 传入
+输入控件作为 children 传入, 每个 Field 应仅有一个控件, 否则多余的控件将被忽略.
 
-### `<SubmitButton />`
-提交按钮组件, 点击时自动调用 `<Form />` 的 `onSubmit` 方法.
+## License
+
+MIT License
