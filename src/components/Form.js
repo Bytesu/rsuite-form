@@ -5,7 +5,8 @@ import { Schema } from '../utils/Schema';
 export default class Form extends React.Component {
     static propTypes = {
         formData: React.PropTypes.object,
-        schema:   React.PropTypes.instanceOf(Schema)
+        schema:   React.PropTypes.instanceOf(Schema),
+        onChange: React.PropTypes.func
     };
 
     constructor(props) {
@@ -13,6 +14,14 @@ export default class Form extends React.Component {
         this.state = {
             formData: this.props.formData || {}
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            formData: nextProps.formData
+        });
+        const { onChange } = this.props;
+        onChange && onChange();
     }
 
     setField(fieldName, fieldValue) {
@@ -23,12 +32,12 @@ export default class Form extends React.Component {
         }
 
         let formData = this.state.formData;
+        formData[fieldName] = fieldValue;
         this.setState({
-            formData: {
-                ...formData,
-                [fieldName]: fieldValue
-            }
+            formData
         });
+        const { onChange } = this.props;
+        onChange && onChange();
     }
 
     render() {
