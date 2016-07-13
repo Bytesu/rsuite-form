@@ -55,12 +55,6 @@ export default class Form extends React.Component {
                                 const { name } = child.props;
                                 const value = formData[name];
                                 const checkResult = schema.checkForField(name, value);
-                                const fieldHaveNotBeenEdited = value === undefined // value undefined means user haven't touched this field
-                                if(fieldHaveNotBeenEdited) {
-                                    // if field haven't been edited, error messages are not supposed to be shown.
-                                    // set err false to hide error messages
-                                    checkResult.err = false;
-                                }
                                 return React.cloneElement(child, {
                                     key: name,
                                     onFieldChange: this.setField.bind(this, name),
