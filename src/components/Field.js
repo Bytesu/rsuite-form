@@ -3,10 +3,11 @@ import { findDOMNode } from 'react-dom';
 
 export default class Field extends React.Component {
     static propTypes = {
-        name: React.PropTypes.string.isRequired,
+        name:          React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        checkResult: React.PropTypes.object,
-        value: React.PropTypes.any
+        checkResult:   React.PropTypes.object,
+        value:         React.PropTypes.any,
+        force:         React.PropTypes.bool
     }
 
     handleFieldChange(v) {
@@ -46,19 +47,24 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const { onFieldChange, checkResult, value } = this.props;
+        const { onFieldChange, checkResult, value, force: localForce } = this.props;
         const fieldCtrl = this.getFieldControl();
+        const { onChange: inlineOnChange, force: inlineForce } = fieldCtrl.props;
+        const isValid = !checkResult.err;
+        const errorMessage = !checkResult.msg;
+        const force = inlineForce !== undefined ? inlineForce : localForce;
         return (
             <div>
             {
                 fieldCtrl && React.cloneElement(fieldCtrl, {
                     onChange: (v) => {
                         onFieldChange(v);
-                        fieldCtrl.props.onChange && fieldCtrl.props.onChange(v); // run custom onChange callback last
+                        inlineOnChange && inlineOnChange(v); // run custom onChange callback last
                     },
-                    isValid: !checkResult.err,
-                    errorMessage: checkResult.msg,
-                    value
+                    isValid,
+                    errorMessage,
+                    value,
+                    force
                 })
             }
             </div>

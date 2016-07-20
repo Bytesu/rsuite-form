@@ -6,7 +6,8 @@ export default class Form extends React.Component {
     static propTypes = {
         formData: React.PropTypes.object,
         schema:   React.PropTypes.instanceOf(Schema),
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        force:    React.PropTypes.bool
     };
 
     constructor(props) {
@@ -41,7 +42,7 @@ export default class Form extends React.Component {
     }
 
     render() {
-        const { schema } = this.props;
+        const { schema, force: globalForce } = this.props;
         const formData = this.state.formData;
 
         return (
@@ -52,14 +53,16 @@ export default class Form extends React.Component {
                     child => {
                         switch(child.type) {
                             case Field:
-                                const { name } = child.props;
+                                const { name, force: localForce } = child.props;
                                 const value = formData[name];
                                 const checkResult = schema.checkForField(name, value);
+                                const force = localForce !== undefined ? localForce : globalForce;
                                 return React.cloneElement(child, {
                                     key: name,
                                     onFieldChange: this.setField.bind(this, name),
                                     value,
-                                    checkResult
+                                    checkResult,
+                                    force
                                 });
                             default:
                                 return child;
