@@ -1,7 +1,12 @@
 import React from 'react';
 import { render, findDOMNode } from 'react-dom';
-import Rsf from '../src/index.js';
+import {Form, Field} from '../src/index.js';
 import { SchemaBuilder, StringType, NumberType } from '../src/utils/Schema';
+
+const userModel = {
+    username: 'farmer john',
+    email: 'john@farmer.cow'
+};
 
 class PlainText extends React.Component {
     static propTypes = {
@@ -24,18 +29,37 @@ class PlainText extends React.Component {
 }
 
 class FarmerJohn extends React.Component {
+    static propTypes = {
+        data: React.PropTypes.object
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: props.data || {...userModel}
+        };
+    }
+
+    getData() {
+        return this.state.data;
+    }
+
+    reset() {
+        this.setState({data: {...userModel}});
+    }
+
     render() {
         const schema = SchemaBuilder({
             data: StringType('input invalid')
         });
+
         return (
-            <Rsf.Form schema={schema} ref="form">
-                <Rsf.Field name="data"> <PlainText onChange={() => console.log('custom onChange()')} /> </Rsf.Field>
-                <button onClick={() => console.log(this.refs.form.getData())}>submit</button>
-                <button onClick={() => {
-                    this.refs.form.reset();
-                }}>clear</button>
-            </Rsf.Form>
+            <Form schema={schema} formData={this.state.data} onChange={() => console.log('form changed')} ref="form">
+                <Field name="username"> <PlainText onChange={() => console.log('custom onChange()')} /> </Field>
+                <Field name="email"> <PlainText onChange={() => console.log('custom onChange()')} /> </Field>
+                <button onClick={() => console.log(this.getData())}>submit</button>
+                <button onClick={this.reset.bind(this)}>reset</button>
+            </Form>
         );
     }
 }

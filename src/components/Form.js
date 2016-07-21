@@ -1,19 +1,49 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
-import * as actions from '../actions';
 import Field from './Field.js';
 import { Schema } from '../utils/Schema';
 
 export default class Form extends React.Component {
     static propTypes = {
-        formData: React.PropTypes.object.isRequired,
-        dispatch: React.PropTypes.func.isRequired,
-        schema:   React.PropTypes.instanceOf(Schema)
+        formData: React.PropTypes.object,
+        schema:   React.PropTypes.instanceOf(Schema),
+        onChange: React.PropTypes.func,
+        force:    React.PropTypes.bool
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            formData: this.props.formData || {}
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            formData: nextProps.formData
+        });
+        const { onChange } = this.props;
+        onChange && onChange();
+    }
+
+    setField(fieldName, fieldValue) {
+        let fieldType = this.props.schema.getFieldType(fieldName).constructor;
+        if(fieldType) {
+            // parse value to target type
+            fieldValue = fieldType.from(fieldValue);
+        }
+
+        let formData = this.state.formData;
+        formData[fieldName] = fieldValue;
+        this.setState({
+            formData
+        });
+        const { onChange } = this.props;
+        onChange && onChange();
+    }
+
     render() {
-        const { dispatch, formData, onSubmit, schema } = this.props;
-        const bindedActions = bindActionCreators(actions, dispatch);
+        const { schema, force: globalForce } = this.props;
+        const formData = this.state.formData;
 
         return (
             <form onSubmit={(e) => e.preventDefault()}>
@@ -23,24 +53,16 @@ export default class Form extends React.Component {
                     child => {
                         switch(child.type) {
                             case Field:
-                                const { name } = child.props;
+                                const { name, force: localForce } = child.props;
                                 const value = formData[name];
-                                const fieldHaveNotBeenEdited = value === undefined // value undefined means user haven't touched this field
                                 const checkResult = schema.checkForField(name, value);
-                                if(fieldHaveNotBeenEdited) {
-                                    // if field haven't been edited, error messages are not supposed to be shown.
-                                    // set err false to hide error messages
-                                    checkResult.err = false;
-                                }
+                                const force = localForce !== undefined ? localForce : globalForce;
                                 return React.cloneElement(child, {
                                     key: name,
-                                    onFieldChange: (name, rawValue) => {
-                                        let fieldType = schema.getFieldType(name).constructor;
-                                        let value = fieldType.from(rawValue);
-                                        bindedActions.changeFieldValue(name, value);
-                                    },
+                                    onFieldChange: this.setField.bind(this, name),
                                     value,
-                                    checkResult
+                                    checkResult,
+                                    force
                                 });
                             default:
                                 return child;
