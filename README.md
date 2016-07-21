@@ -34,6 +34,7 @@ __props__
 - `schema:schema object` 用来校验表单数据. 请看 [rsuite-schema](https://github.com/rsuite/rsuite-schema)
 - `formData: object` 表单数据, 以每项数据的 name 作为 key 存储对应 value
 - `onChange:function` 当 formData 发生变化时自动调用该方法
+- `force:bool` 强制校验, 默认 false
 
 ### `<Field />`
 表单域组件, 一条表单数据对于一个 `<Field />`
@@ -41,6 +42,7 @@ __props__
 __props__
 
 - `name:string` 表单数据 `name`
+- `force:bool` 强制校验, 默认 false, 当该值未指定时, 会使用 `<Form />` 的设置, 该设置会覆盖`<Form />`的设置
 
 __children__
 
