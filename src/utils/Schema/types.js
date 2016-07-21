@@ -60,8 +60,15 @@ class Str extends Type {
         return this;
     }
 
-    isOneOf(strArr) {
-        return strArr.includes(strArr);
+    isOneOf(strArr, msg) {
+        super.addValidator( v => strArr.includes(v), msg);
+        return this;
+    }
+
+    isValidEmail(msg) {
+        let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        super.addValidator( v => re.test(v), msg);
+        return this;
     }
 }
 
