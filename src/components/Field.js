@@ -51,7 +51,7 @@ export default class Field extends React.Component {
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange, force: inlineForce } = fieldCtrl.props;
         const isValid = !checkResult.err;
-        const errorMessage = !checkResult.msg;
+        const errorMessage = checkResult.msg;
         const force = inlineForce !== undefined ? inlineForce : localForce;
         return (
             <div>
