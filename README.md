@@ -5,8 +5,6 @@
 - 收集数据
 - 校验数据
 
-see [no-redux branch](https://github.com/rsuite/rsuite-form/tree/no-redux)
-
 ## Example
 
 ```
