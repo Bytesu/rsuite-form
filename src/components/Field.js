@@ -5,7 +5,7 @@ export default class Field extends React.Component {
     static propTypes = {
         name:          React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        checkResult:   React.PropTypes.object,
+        checkResult:   React.PropTypes.object.isRequired,
         value:         React.PropTypes.any,
         force:         React.PropTypes.bool
     }
