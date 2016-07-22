@@ -3,20 +3,22 @@ const webpack = require('webpack');
 
 const PATHS = {
     src: path.join(__dirname, 'src'),
-    dist: path.join(__dirname, 'dist')
+    dist: path.join(__dirname, 'lib')
 };
 
 module.exports = {
-    devtool: 'eval',
+    devtool: 'source-map',
     entry: PATHS.src,
     output: {
         path: PATHS.dist,
-        filename: 'bundle.js'
+        filename: 'index.js',
+        libraryTarget: 'umd',
+        library: 'RSForm'
     },
-    devServer: {
-        hot: true,
-        inline: true,
-        contentBase: PATHS.dist
+    externals: {
+        'react': 'react',
+        'react-dom': 'react-dom',
+        'rsuite-schema': 'rsuite-schema'
     },
     module: {
         loaders: [
@@ -30,8 +32,5 @@ module.exports = {
             include: PATHS.src
         }
         ]
-    },
-    plugins: [
-        new webpack.HotModuleReplacementPlugin()
-    ]
+    }
 };
