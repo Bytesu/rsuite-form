@@ -1,9 +1,14 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import Field from './Field.js';
-import { Schema } from 'rsuite-schema';
+import { Schema, SchemaBuilder } from 'rsuite-schema';
 
 export default class Form extends React.Component {
+    static defaultProps = {
+        schema: SchemaBuilder({}),
+        force: false
+    };
+
     static propTypes = {
         formData: React.PropTypes.object,
         schema:   React.PropTypes.instanceOf(Schema),

@@ -2,13 +2,18 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 
 export default class Field extends React.Component {
+    static defaultProps = {
+        checkResult: { err: false },
+        force: false
+    };
+
     static propTypes = {
         name:          React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        checkResult:   React.PropTypes.object.isRequired,
+        checkResult:   React.PropTypes.object,
         value:         React.PropTypes.any,
         force:         React.PropTypes.bool
-    }
+    };
 
     handleFieldChange(v) {
         const { name, onFieldChange } = this.props;
