@@ -4,7 +4,7 @@
   "description": "React Simple Form",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "webpack",
+    "compile": "webpack",
     "start:demo": "webpack-dev-server --config webpack.demo.config.js",
     "test": "karma start"
   },
