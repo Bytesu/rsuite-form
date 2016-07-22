@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, findDOMNode } from 'react-dom';
-import { Form, Field } from '../src/index.js';
-import { SchemaBuilder, StringType } from '../src/utils/Schema';
+import { Form, Field } from '../lib/index.js';
+import { SchemaBuilder, StringType } from 'rsuite-schema';
 
 class PlainText extends React.Component {
     static propTypes = {
