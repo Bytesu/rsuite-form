@@ -5,6 +5,14 @@
 - 收集数据
 - 校验数据
 
+## Install
+
+install via npm
+
+```
+npm install rsuite-form
+```
+
 ## Example
 
 ```
