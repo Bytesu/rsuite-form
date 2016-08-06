@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Field from './Field.js';
-import { Schema, SchemaBuilder } from 'rsuite-schema';
+import { Schema, SchemaModel } from 'rsuite-schema';
 
 export default class Form extends React.Component {
     static defaultProps = {
-        schema: SchemaBuilder({}),
+        model: SchemaModel({}),
         force: false
     };
 
     static propTypes = {
         formData: React.PropTypes.object,
-        schema:   React.PropTypes.instanceOf(Schema),
+        model: React.PropTypes.instanceOf(Schema),
         onChange: React.PropTypes.func,
-        force:    React.PropTypes.bool
+        force: React.PropTypes.bool
     };
 
     constructor(props) {
@@ -28,54 +28,72 @@ export default class Form extends React.Component {
             formData: nextProps.formData
         });
         const { onChange } = this.props;
-        onChange && onChange();
+        onChange && onChange(nextProps.formData);
     }
 
     setField(fieldName, fieldValue) {
-        let fieldType = this.props.schema.getFieldType(fieldName).constructor;
-        if(fieldType) {
+        const fieldType = this.props.model.getFieldType(fieldName).constructor;
+        if (fieldType) {
             // parse value to target type
             fieldValue = fieldType.from(fieldValue);
         }
+        const {formData} = this.state;
 
-        let formData = this.state.formData;
         formData[fieldName] = fieldValue;
+
         this.setState({
             formData
         });
         const { onChange } = this.props;
-        onChange && onChange();
+        onChange && onChange(formData);
     }
-
+    setCheckResult(name, checkResult) {
+        this.formCheckResult = this.formCheckResult || {}
+        this.formCheckResult[name] = checkResult;
+    }
+    getCheckResult() {
+        return this.formCheckResult;
+    }
+    isValid() {
+        for (var key in this.formCheckResult) {
+            if (this.formCheckResult[key].hasError) {
+                return false;
+            }
+        }
+        return true;
+    }
     render() {
-        const { schema, force: globalForce } = this.props;
+        const { model, force: globalForce } = this.props;
         const formData = this.state.formData;
 
         return (
-            <form onSubmit={(e) => e.preventDefault()}>
-            {
-                React.Children.map(
-                    this.props.children,
-                    child => {
-                        switch(child.type) {
-                            case Field:
-                                const { name, force: localForce } = child.props;
-                                const value = formData[name];
-                                const checkResult = schema.checkForField(name, value);
-                                const force = localForce !== undefined ? localForce : globalForce;
-                                return React.cloneElement(child, {
-                                    key: name,
-                                    onFieldChange: this.setField.bind(this, name),
-                                    value,
-                                    checkResult,
-                                    force
-                                });
-                            default:
-                                return child;
+            <form onSubmit={(e) => e.preventDefault() }>
+                {
+                    React.Children.map(
+                        this.props.children,
+                        child => {
+                            switch (child.type) {
+                                case Field:
+                                    const { name, force: localForce } = child.props;
+                                    const value = formData[name];
+                                    const checkResult = model.checkForField(name, value);
+
+                                    this.setCheckResult(name, checkResult);
+
+                                    const force = localForce !== undefined ? localForce : globalForce;
+                                    return React.cloneElement(child, {
+                                        key: name,
+                                        onFieldChange: this.setField.bind(this, name),
+                                        value,
+                                        checkResult,
+                                        force
+                                    });
+                                default:
+                                    return child;
+                            }
                         }
-                    }
-                )
-            }
+                    )
+                }
             </form>
         );
     }

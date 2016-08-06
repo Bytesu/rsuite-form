@@ -3,16 +3,18 @@ import { findDOMNode } from 'react-dom';
 
 export default class Field extends React.Component {
     static defaultProps = {
-        checkResult: { err: false },
-        force: false
+        checkResult: { hasError: false }
     };
 
     static propTypes = {
-        name:          React.PropTypes.string.isRequired,
+        name: React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        checkResult:   React.PropTypes.object,
-        value:         React.PropTypes.any,
-        force:         React.PropTypes.bool
+        checkResult: React.PropTypes.shape({
+            hasError: React.PropTypes.bool,
+            errorMessage: React.PropTypes.string
+        }),
+        value: React.PropTypes.any,
+        force: React.PropTypes.bool
     };
 
     handleFieldChange(v) {
@@ -27,7 +29,7 @@ export default class Field extends React.Component {
         React.Children.forEach(
             this.props.children,
             (child) => {
-                if(React.isValidElement(child)) {
+                if (React.isValidElement(child)) {
                     validChildren.push(child);
                 }
             }
@@ -39,11 +41,11 @@ export default class Field extends React.Component {
     getFieldControl() {
         let validChildren = this.getValidChildren();
 
-        if(validChildren.length > 1) {
+        if (validChildren.length > 1) {
             console.error(`One field should always contain one field control only. Duplicate field controls will be ignored. See Field #{name}`);
         }
 
-        if(validChildren.length < 1) {
+        if (validChildren.length < 1) {
             console.error(`No valid field control found in Field #{name}`);
             return null; // no valid child found, return null
         }
@@ -55,23 +57,23 @@ export default class Field extends React.Component {
         const { onFieldChange, checkResult, value, force: localForce } = this.props;
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange, force: inlineForce } = fieldCtrl.props;
-        const isValid = !checkResult.err;
-        const errorMessage = checkResult.msg;
+        const isValid = !checkResult.hasError;
+        const errorMessage = checkResult.errorMessage;
         const force = inlineForce !== undefined ? inlineForce : localForce;
         return (
             <div>
-            {
-                fieldCtrl && React.cloneElement(fieldCtrl, {
-                    onChange: (v) => {
-                        onFieldChange(v);
-                        inlineOnChange && inlineOnChange(v); // run custom onChange callback last
-                    },
-                    isValid,
-                    errorMessage,
-                    value,
-                    force
-                })
-            }
+                {
+                    fieldCtrl && React.cloneElement(fieldCtrl, {
+                        onChange: (value) => {
+                            onFieldChange(value);
+                            inlineOnChange && inlineOnChange(value); // run custom onChange callback last
+                        },
+                        isValid,
+                        errorMessage,
+                        value,
+                        force
+                    })
+                }
             </div>
         );
     }
