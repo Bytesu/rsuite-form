@@ -10,8 +10,8 @@ export default class Form extends React.Component {
     };
 
     static propTypes = {
-        formData: React.PropTypes.object,
-        model: React.PropTypes.instanceOf(Schema),
+        formData: React.PropTypes.object.isRequired,
+        model: React.PropTypes.instanceOf(Schema).isRequired,
         onChange: React.PropTypes.func,
         force: React.PropTypes.bool
     };

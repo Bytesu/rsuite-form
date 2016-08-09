@@ -1,5 +1,6 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
+import debounce from '../utils/debounce'
 
 export default class Field extends React.Component {
     static defaultProps = {
@@ -64,10 +65,10 @@ export default class Field extends React.Component {
             <div>
                 {
                     fieldCtrl && React.cloneElement(fieldCtrl, {
-                        onChange: (value) => {
+                        onChange: debounce((value) => {
                             onFieldChange(value);
                             inlineOnChange && inlineOnChange(value); // run custom onChange callback last
-                        },
+                        }, 500),
                         isValid,
                         errorMessage,
                         value,
@@ -78,4 +79,6 @@ export default class Field extends React.Component {
         );
     }
 }
+
+
 
