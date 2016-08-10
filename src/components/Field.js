@@ -15,7 +15,7 @@ export default class Field extends React.Component {
             errorMessage: React.PropTypes.string
         }),
         value: React.PropTypes.any,
-        force: React.PropTypes.bool
+        formStatus: React.PropTypes.oneOf(['WAITING', 'TYPING'])
     };
 
     handleFieldChange(v) {
@@ -55,12 +55,13 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const { onFieldChange, checkResult, value, force: localForce } = this.props;
+        const { onFieldChange, checkResult, value, formStatus} = this.props;
         const fieldCtrl = this.getFieldControl();
-        const { onChange: inlineOnChange, force: inlineForce } = fieldCtrl.props;
+        const { onChange: inlineOnChange  } = fieldCtrl.props;
+
         const isValid = !checkResult.hasError;
         const errorMessage = checkResult.errorMessage;
-        const force = inlineForce !== undefined ? inlineForce : localForce;
+
         return (
             <div>
                 {
@@ -72,7 +73,7 @@ export default class Field extends React.Component {
                         isValid,
                         errorMessage,
                         value,
-                        force
+                        formStatus
                     })
                 }
             </div>
