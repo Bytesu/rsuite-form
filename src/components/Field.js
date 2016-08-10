@@ -19,6 +19,7 @@ export default class Field extends React.Component {
     };
 
     handleFieldChange(v) {
+        console.log('*****************');
         const { name, onFieldChange } = this.props;
         onFieldChange(name, v);
     }
@@ -65,10 +66,10 @@ export default class Field extends React.Component {
             <div>
                 {
                     fieldCtrl && React.cloneElement(fieldCtrl, {
-                        onChange: debounce((value) => {
+                        onChange: (value) => {
                             onFieldChange(value);
                             inlineOnChange && inlineOnChange(value); // run custom onChange callback last
-                        }, 500),
+                        },
                         isValid,
                         errorMessage,
                         value,

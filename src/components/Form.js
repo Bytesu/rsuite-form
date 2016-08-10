@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Field from './Field.js';
+import debounce from '../utils/debounce.js';
 import { Schema, SchemaModel } from 'rsuite-schema';
 
 export default class Form extends React.Component {
@@ -52,7 +53,7 @@ export default class Form extends React.Component {
         this.formCheckResult[name] = checkResult;
     }
     getCheckResult() {
-        return this.formCheckResult;
+        return this.formCheckResult || {};
     }
     isValid() {
         for (var key in this.formCheckResult) {
@@ -76,9 +77,14 @@ export default class Form extends React.Component {
                                 case Field:
                                     const { name, force: localForce } = child.props;
                                     const value = formData[name];
-                                    const checkResult = model.checkForField(name, value);
 
-                                    this.setCheckResult(name, checkResult);
+                                    debounce( () => {
+                                        console.log('*****', name, value);
+                                        const checkResult = model.checkForField(name, value);
+                                        this.setCheckResult(name, checkResult);
+                                    }, 500 )();
+
+                                    const checkResult = this.getCheckResult()[name] || {};
 
                                     const force = localForce !== undefined ? localForce : globalForce;
                                     return React.cloneElement(child, {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, findDOMNode } from 'react-dom';
-import { Form, Field } from '../lib/index.js';
-import { SchemaBuilder, StringType } from 'rsuite-schema';
+import { Form, Field } from '../src/index.js';
+import { SchemaModel, StringType } from 'rsuite-schema';
 
 class PlainText extends React.Component {
     static propTypes = {
@@ -70,15 +70,15 @@ class FarmerJohn extends React.Component {
     }
 
     render() {
-        const schema = SchemaBuilder({
+        const schema = SchemaModel({
             username: StringType('username required')
                       .isLongerThan(6, 'username must longer than 6'),
             email:    StringType('email required')
-                      .isValidEmail('no a valid email address')
+                      .isEmail('no a valid email address')
         });
 
         return (
-            <Form schema={schema} formData={this.state.data} onChange={() => console.log('form changed')} force={this.state.forceValidation} ref="form">
+            <Form model={schema} formData={this.state.data} onChange={() => console.log('form changed')} force={this.state.forceValidation} ref="form">
                 <Field name="username"> <PlainText onChange={() => console.log('username changed')} /> </Field>
                 <Field name="email"> <PlainText onChange={() => console.log('email changed')} /> </Field>
                 <button onClick={this.handleSubmit.bind(this)}>submit</button>
