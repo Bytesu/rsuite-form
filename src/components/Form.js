@@ -79,7 +79,6 @@ export default class Form extends React.Component {
                                     const value = formData[name];
 
                                     debounce( () => {
-                                        console.log('*****', name, value);
                                         const checkResult = model.checkForField(name, value);
                                         this.setCheckResult(name, checkResult);
                                     }, 500 )();

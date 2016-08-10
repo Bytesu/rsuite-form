@@ -19,7 +19,6 @@ export default class Field extends React.Component {
     };
 
     handleFieldChange(v) {
-        console.log('*****************');
         const { name, onFieldChange } = this.props;
         onFieldChange(name, v);
     }
