@@ -3,24 +3,44 @@ import { findDOMNode } from 'react-dom';
 import debounce from '../utils/debounce'
 
 export default class Field extends React.Component {
-    static defaultProps = {
-        checkResult: { hasError: false }
-    };
+
 
     static propTypes = {
         name: React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        checkResult: React.PropTypes.shape({
-            hasError: React.PropTypes.bool,
-            errorMessage: React.PropTypes.string
-        }),
         value: React.PropTypes.any,
         formStatus: React.PropTypes.oneOf(['WAITING', 'TYPING'])
     };
 
-    handleFieldChange(v) {
-        const { name, onFieldChange } = this.props;
-        onFieldChange(name, v);
+    constructor(props) {
+        super(props);
+        this.state = {
+            checkResult: {},
+            status: 'WAITING'
+        };
+    }
+
+    handleFieldChange(value) {
+        const { name, onFieldChange, formStatus, model } = this.props;
+
+        const fieldCtrl = this.getFieldControl();
+        const { onChange: inlineOnChange  } = fieldCtrl.props;
+        const checkResult = model.checkForField(name, value);
+
+        this.setState({
+            status: "TYPING",
+            checkResult
+        });
+
+        onFieldChange(value, checkResult);
+        inlineOnChange && inlineOnChange(value); // run custom onChange callback last
+
+    }
+
+    handleBlur() {
+        this.setState({
+            status: "WAITING"
+        })
     }
 
     getValidChildren() {
@@ -55,23 +75,35 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const { onFieldChange, checkResult, value, formStatus} = this.props;
+        const { value, formStatus, error} = this.props;
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange  } = fieldCtrl.props;
 
-        const isValid = !checkResult.hasError;
-        const errorMessage = checkResult.errorMessage;
+        let checkResult = this.state.checkResult;
+        let isValid = undefined;
+
+        if (error && formStatus === 'WAITING') {
+            checkResult = {
+                hasError: true,
+                errorMessage: error
+            };
+            isValid = false;
+        }
+
+
+
+        if (this.state.status === 'TYPING') {
+            isValid = !checkResult.hasError;
+        }
 
         return (
             <div>
                 {
                     fieldCtrl && React.cloneElement(fieldCtrl, {
-                        onChange: (value) => {
-                            onFieldChange(value);
-                            inlineOnChange && inlineOnChange(value); // run custom onChange callback last
-                        },
+                        onChange: this.handleFieldChange.bind(this),
+                        onBlur: this.handleBlur.bind(this),
                         isValid,
-                        errorMessage,
+                        errorMessage: checkResult.errorMessage,
                         value,
                         formStatus
                     })
@@ -80,6 +112,3 @@ export default class Field extends React.Component {
         );
     }
 }
-
-
-

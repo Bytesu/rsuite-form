@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import Field from './Field.js';
-import debounce from '../utils/debounce.js';
 import { Schema, SchemaModel } from 'rsuite-schema';
 
 export default class Form extends React.Component {
@@ -41,13 +40,15 @@ export default class Form extends React.Component {
         onChange && onChange(nextProps.formData);
     }
 
-    setField(fieldName, fieldValue) {
+    setField(fieldName, fieldValue, checkResult) {
         const fieldType = this.props.model.getFieldType(fieldName).constructor;
+        const { onChange } = this.props;
+        const {formData} = this.state;
+
         if (fieldType) {
             // parse value to target type
             fieldValue = fieldType.from(fieldValue);
         }
-        const {formData} = this.state;
 
         formData[fieldName] = fieldValue;
 
@@ -55,16 +56,17 @@ export default class Form extends React.Component {
             status: 'TYPING',
             formData
         });
-        const { onChange } = this.props;
+
         onChange && onChange(formData);
-    }
-    setCheckResult(name, checkResult) {
+
         this.formCheckResult = this.formCheckResult || {}
-        this.formCheckResult[name] = checkResult;
+        this.formCheckResult[fieldName] = checkResult;
     }
+
     getCheckResult() {
         return this.formCheckResult || {};
     }
+
     isValid() {
         for (var key in this.formCheckResult) {
             if (this.formCheckResult[key].hasError) {
@@ -73,6 +75,7 @@ export default class Form extends React.Component {
         }
         return true;
     }
+
     render() {
         const { model, errors, horizontal, inline, className} = this.props;
         const formData = this.state.formData;
@@ -94,25 +97,12 @@ export default class Form extends React.Component {
                                     const { name  } = child.props;
                                     const value = formData[name];
 
-                                    debounce(() => {
-                                        const checkResult = model.checkForField(name, value);
-                                        this.setCheckResult(name, checkResult);
-                                    }, 500)();
-
-                                    let checkResult = this.getCheckResult()[name] || {};
-
-                                    if (errors[name] && this.state.status === 'WAITING') {
-                                        checkResult = {
-                                            hasError: true,
-                                            errorMessage: errors[name]
-                                        }
-                                    }
-
                                     return React.cloneElement(child, {
                                         key: name,
                                         onFieldChange: this.setField.bind(this, name),
                                         value,
-                                        checkResult,
+                                        model,
+                                        error: errors[name],
                                         formStatus: this.state.status
                                     });
                                 default:

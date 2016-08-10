@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "webpack",
     "prepublish": "npm run compile",
-    "start:demo": "webpack-dev-server --config webpack.demo.config.js",
+    "start:demo": "webpack-dev-server --port 3800 --config webpack.demo.config.js",
     "test": "karma start"
   },
   "repository": {
