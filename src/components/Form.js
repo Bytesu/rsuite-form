@@ -52,6 +52,7 @@ export default class Form extends React.Component {
         formData[fieldName] = fieldValue;
 
         this.setState({
+            status: 'TYPING',
             formData
         });
         const { onChange } = this.props;
@@ -77,9 +78,9 @@ export default class Form extends React.Component {
         const formData = this.state.formData;
 
         const clesses = classNames({
-            'form': true ,
-            'form-horizontal':horizontal,
-            'form-inline':inline
+            'form': true,
+            'form-horizontal': horizontal,
+            'form-inline': inline
         }, className);
 
         return (
@@ -100,7 +101,7 @@ export default class Form extends React.Component {
 
                                     let checkResult = this.getCheckResult()[name] || {};
 
-                                    if (errors[name]) {
+                                    if (errors[name] && this.state.status === 'WAITING') {
                                         checkResult = {
                                             hasError: true,
                                             errorMessage: errors[name]
