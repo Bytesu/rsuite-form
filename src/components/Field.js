@@ -15,14 +15,13 @@ export default class Field extends React.Component {
         super(props);
         this.state = {
             checkResult: {},
-            value: this.props.value,
             status: 'WAITING'
         };
     }
 
     onCheck() {
-        const { name, model } = this.props;
-        const checkResult = model.checkForField(name, this.state.value);
+        const { name, model, value } = this.props;
+        const checkResult = model.checkForField(name, value);
 
         this.setState({ checkResult });
 
@@ -42,7 +41,6 @@ export default class Field extends React.Component {
 
         this.setState({
             status: "TYPING",
-            value,
             checkResult
         });
 
