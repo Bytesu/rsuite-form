@@ -41,24 +41,23 @@ export default class Form extends React.Component {
     setField(fieldName, fieldValue, checkResult) {
         const fieldType = this.props.model.getFieldType(fieldName).constructor;
         const { onChange } = this.props;
-        const { formData, errors } = this.state;
 
         if (fieldType) {
             // parse value to target type
             fieldValue = fieldType.from(fieldValue);
         }
 
-        formData[fieldName] = fieldValue;
-        errors[fieldName] = undefined;
+        const formData = Object.assign({}, this.state.formData, { [fieldName]: fieldValue });
+        const errors = Object.assign({}, this.state.errors, { [fieldName]: undefined });
 
         this.setState({
             formData, errors
         });
 
-        onChange && onChange(formData);
-
         this.formCheckResult = this.formCheckResult || {}
         this.formCheckResult[fieldName] = checkResult;
+
+        onChange && onChange(formData);
     }
 
     getCheckResult() {
@@ -75,6 +74,13 @@ export default class Form extends React.Component {
             }
         }
         return valid;
+    }
+
+    get() {
+        return {
+            isValid: this.isValid(),
+            formData: this.state.formData
+        }
     }
 
     reset() {
