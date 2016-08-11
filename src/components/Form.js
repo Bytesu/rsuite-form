@@ -7,7 +7,6 @@ import { Schema, SchemaModel } from 'rsuite-schema';
 export default class Form extends React.Component {
     static defaultProps = {
         model: SchemaModel({}),
-        status: 'WAITING',
         horizontal: false,
         inline: false,
         errors: {}
@@ -19,7 +18,6 @@ export default class Form extends React.Component {
         formData: React.PropTypes.object.isRequired,
         model: React.PropTypes.instanceOf(Schema).isRequired,
         onChange: React.PropTypes.func,
-        status: React.PropTypes.oneOf(['WAITING', 'TYPING']),
         errors: React.PropTypes.object
     };
 
@@ -27,14 +25,14 @@ export default class Form extends React.Component {
         super(props);
         this.state = {
             formData: this.props.formData || {},
-            status: this.props.status
+            errors: this.props.formData || {}
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             formData: nextProps.formData,
-            status: nextProps.status
+            errors: nextProps.errors
         });
         const { onChange } = this.props;
         onChange && onChange(nextProps.formData);
@@ -43,7 +41,7 @@ export default class Form extends React.Component {
     setField(fieldName, fieldValue, checkResult) {
         const fieldType = this.props.model.getFieldType(fieldName).constructor;
         const { onChange } = this.props;
-        const {formData} = this.state;
+        const { formData, errors } = this.state;
 
         if (fieldType) {
             // parse value to target type
@@ -51,10 +49,10 @@ export default class Form extends React.Component {
         }
 
         formData[fieldName] = fieldValue;
+        errors[fieldName] = undefined;
 
         this.setState({
-            status: 'TYPING',
-            formData
+            formData, errors
         });
 
         onChange && onChange(formData);
@@ -68,17 +66,26 @@ export default class Form extends React.Component {
     }
 
     isValid() {
-        for (var key in this.formCheckResult) {
-            if (this.formCheckResult[key].hasError) {
-                return false;
+        let valid = true;
+        this.setState({ errors: {} });
+        for (let key in this.refs) {
+            let checkResult = this.refs[key].onCheck();
+            if (checkResult.hasError) {
+                valid = false;
             }
         }
-        return true;
+        return valid;
+    }
+
+    reset() {
+        for (let key in this.refs) {
+            this.refs[key].onReset();
+        }
     }
 
     render() {
-        const { model, errors, horizontal, inline, className} = this.props;
-        const formData = this.state.formData;
+        const { children, model, horizontal, inline, className} = this.props;
+        const { errors, formData } = this.state;
 
         const clesses = classNames({
             'form': true,
@@ -89,27 +96,25 @@ export default class Form extends React.Component {
         return (
             <form onSubmit={(e) => e.preventDefault() }  className={clesses}>
                 {
-                    React.Children.map(
-                        this.props.children,
-                        child => {
-                            switch (child.type) {
-                                case Field:
-                                    const { name  } = child.props;
-                                    const value = formData[name];
+                    React.Children.map(children, (child, index) => {
+                        switch (child.type) {
+                            case Field:
+                                const { name } = child.props;
+                                const value = formData[name];
+                                const key = `${name}_${index}`;
 
-                                    return React.cloneElement(child, {
-                                        key: name,
-                                        onFieldChange: this.setField.bind(this, name),
-                                        value,
-                                        model,
-                                        error: errors[name],
-                                        formStatus: this.state.status
-                                    });
-                                default:
-                                    return child;
-                            }
+                                return React.cloneElement(child, {
+                                    key,
+                                    value,
+                                    model,
+                                    ref: key,
+                                    onFieldChange: this.setField.bind(this, name),
+                                    error: errors[name]
+                                });
+                            default:
+                                return child;
                         }
-                    )
+                    })
                 }
             </form>
         );

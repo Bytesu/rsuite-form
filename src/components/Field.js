@@ -8,20 +8,33 @@ export default class Field extends React.Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        value: React.PropTypes.any,
-        formStatus: React.PropTypes.oneOf(['WAITING', 'TYPING'])
+        value: React.PropTypes.any
     };
 
     constructor(props) {
         super(props);
         this.state = {
             checkResult: {},
+            value: this.props.value,
             status: 'WAITING'
         };
     }
 
+    onCheck() {
+        const { name, model } = this.props;
+        const checkResult = model.checkForField(name, this.state.value);
+
+        this.setState({ checkResult });
+
+        return checkResult;
+    }
+
+    onReset() {
+        this.setState({ checkResult: {} });
+    }
+
     handleFieldChange(value) {
-        const { name, onFieldChange, formStatus, model } = this.props;
+        const { name, onFieldChange, model } = this.props;
 
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange  } = fieldCtrl.props;
@@ -29,6 +42,7 @@ export default class Field extends React.Component {
 
         this.setState({
             status: "TYPING",
+            value,
             checkResult
         });
 
@@ -74,27 +88,24 @@ export default class Field extends React.Component {
         return validChildren[0];
     }
 
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.error && this.state.status === 'WAITING') {
+            this.setState({
+                checkResult: {
+                    hasError: true,
+                    errorMessage: nextProps.error
+                }
+            })
+        }
+    }
+
     render() {
-        const { value, formStatus, error} = this.props;
+        const {value, error} = this.props;
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange  } = fieldCtrl.props;
 
-        let checkResult = this.state.checkResult;
-        let isValid = undefined;
-
-        if (error && formStatus === 'WAITING') {
-            checkResult = {
-                hasError: true,
-                errorMessage: error
-            };
-            isValid = false;
-        }
-
-
-
-        if (this.state.status === 'TYPING') {
-            isValid = !checkResult.hasError;
-        }
+        const checkResult = this.state.checkResult;
 
         return (
             <div>
@@ -102,10 +113,9 @@ export default class Field extends React.Component {
                     fieldCtrl && React.cloneElement(fieldCtrl, {
                         onChange: this.handleFieldChange.bind(this),
                         onBlur: this.handleBlur.bind(this),
-                        isValid,
                         errorMessage: checkResult.errorMessage,
-                        value,
-                        formStatus
+                        isValid: checkResult.hasError === undefined ? undefined : !checkResult.hasError,
+                        value
                     })
                 }
             </div>
