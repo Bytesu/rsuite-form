@@ -1,5 +1,6 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
+import elementType from '../utils/elementType';
 
 export default class Field extends React.Component {
 
@@ -7,7 +8,8 @@ export default class Field extends React.Component {
     static propTypes = {
         name: React.PropTypes.string.isRequired,
         onFieldChange: React.PropTypes.func,
-        value: React.PropTypes.any
+        value: React.PropTypes.any,
+        componentClass: elementType
     };
 
     constructor(props) {
@@ -98,14 +100,16 @@ export default class Field extends React.Component {
     }
 
     render() {
-        const {value, error} = this.props;
+        const {value, error, componentClass, ...props} = this.props;
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange  } = fieldCtrl.props;
-
         const checkResult = this.state.checkResult;
+        const Component = componentClass || 'div';
 
         return (
-            <div>
+            <Component {
+                ...props
+            }>
                 {
                     fieldCtrl && React.cloneElement(fieldCtrl, {
                         onChange: this.handleFieldChange.bind(this),
@@ -115,7 +119,7 @@ export default class Field extends React.Component {
                         value
                     })
                 }
-            </div>
+            </Component>
         );
     }
 }
