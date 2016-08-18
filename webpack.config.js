@@ -26,7 +26,7 @@ module.exports = {
             test: /\.jsx?$/,
             loader: 'babel',
             query: {
-                cacheDirectory: true,
+                //cacheDirectory: true,
                 presets: ['es2015', 'stage-0', 'react']
             },
             include: PATHS.src
