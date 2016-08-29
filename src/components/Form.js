@@ -15,8 +15,8 @@ export default class Form extends React.Component {
     static propTypes = {
         horizontal: React.PropTypes.bool,
         inline: React.PropTypes.bool,
-        formData: React.PropTypes.object.isRequired,
-        model: React.PropTypes.instanceOf(Schema).isRequired,
+        formData: React.PropTypes.object,
+        model: React.PropTypes.instanceOf(Schema),
         onChange: React.PropTypes.func,
         errors: React.PropTypes.object
     };
@@ -34,8 +34,6 @@ export default class Form extends React.Component {
             formData: nextProps.formData,
             errors: nextProps.errors
         });
-        const { onChange } = this.props;
-        onChange && onChange(nextProps.formData);
     }
 
     setField(fieldName, fieldValue, checkResult) {
