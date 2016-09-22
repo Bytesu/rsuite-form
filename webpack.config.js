@@ -22,15 +22,26 @@ module.exports = {
     },
     module: {
         loaders: [
-        {
-            test: /\.jsx?$/,
-            loader: 'babel',
-            query: {
-                //cacheDirectory: true,
-                presets: ['es2015', 'stage-0', 'react']
-            },
-            include: PATHS.src
-        }
+            {
+                test: /\.jsx?$/,
+                loader: 'babel',
+                query: {
+                    //cacheDirectory: true,
+                    presets: ['es2015', 'stage-0', 'react'],
+                    plugins: [
+                        "transform-proto-to-assign",
+                        [
+                            //https://gist.github.com/zertosh/4f818163e4d68d58c0fa
+                            "transform-es2015-classes",
+                            {
+                                "loose": true
+                            }
+                        ]
+                    ]
+                },
+                include: PATHS.src
+            }
         ]
     }
 };
+

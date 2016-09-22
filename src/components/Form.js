@@ -4,28 +4,29 @@ import classNames from 'classnames';
 import Field from './Field.js';
 import { Schema, SchemaModel } from 'rsuite-schema';
 
-export default class Form extends React.Component {
-    static defaultProps = {
-        model: SchemaModel({}),
-        horizontal: false,
-        inline: false,
-        errors: {}
-    };
+const defaultProps = {
+    model: SchemaModel({}),
+    horizontal: false,
+    inline: false,
+    errors: {}
+};
 
-    static propTypes = {
-        horizontal: React.PropTypes.bool,
-        inline: React.PropTypes.bool,
-        formData: React.PropTypes.object,
-        model: React.PropTypes.instanceOf(Schema),
-        onChange: React.PropTypes.func,
-        errors: React.PropTypes.object
-    };
+const propTypes = {
+    horizontal: React.PropTypes.bool,
+    inline: React.PropTypes.bool,
+    formData: React.PropTypes.object,
+    model: React.PropTypes.instanceOf(Schema),
+    onChange: React.PropTypes.func,
+    errors: React.PropTypes.object
+};
+
+class Form extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             formData: this.props.formData || {},
-            errors: this.props.formData || {}
+            errors: this.props.errors || {}
         };
     }
 
@@ -124,3 +125,8 @@ export default class Form extends React.Component {
         );
     }
 }
+
+Form.defaultProps = defaultProps;
+Form.propTypes = propTypes;
+
+export default Form;

@@ -2,15 +2,14 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import elementType from '../utils/elementType';
 
-export default class Field extends React.Component {
+const propTypes = {
+    name: React.PropTypes.string.isRequired,
+    onFieldChange: React.PropTypes.func,
+    value: React.PropTypes.any,
+    componentClass: elementType
+};
 
-
-    static propTypes = {
-        name: React.PropTypes.string.isRequired,
-        onFieldChange: React.PropTypes.func,
-        value: React.PropTypes.any,
-        componentClass: elementType
-    };
+class Field extends React.Component {
 
     constructor(props) {
         super(props);
@@ -123,3 +122,7 @@ export default class Field extends React.Component {
         );
     }
 }
+
+Field.propTypes = propTypes;
+
+export default Field;
