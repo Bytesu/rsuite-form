@@ -92,6 +92,10 @@ class Form extends React.Component {
         const { children, model, horizontal, inline, className} = this.props;
         const { errors, formData } = this.state;
 
+        if(!formData){
+            console.error('formData is undefined');
+        }
+
         const clesses = classNames({
             'form': true,
             'form-horizontal': horizontal,
@@ -107,7 +111,6 @@ class Form extends React.Component {
                                 const { name } = child.props;
                                 const value = formData[name];
                                 const key = `${name}_${index}`;
-
                                 return React.cloneElement(child, {
                                     key,
                                     value,

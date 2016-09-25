@@ -1,6 +1,6 @@
 {
   "name": "rsuite-form",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "description": "Form component for rsuite",
   "main": "lib/index.js",
   "scripts": {

@@ -99,27 +99,20 @@ class Field extends React.Component {
     }
 
     render() {
-        const {value, error, componentClass, ...props} = this.props;
+        const {value, error, componentClass: Component, ...props} = this.props;
         const fieldCtrl = this.getFieldControl();
         const { onChange: inlineOnChange  } = fieldCtrl.props;
         const checkResult = this.state.checkResult;
-        const Component = componentClass || 'div';
 
-        return (
-            <Component {
-                ...props
-            }>
-                {
-                    fieldCtrl && React.cloneElement(fieldCtrl, {
-                        onChange: this.handleFieldChange.bind(this),
-                        onBlur: this.handleBlur.bind(this),
-                        errorMessage: checkResult.errorMessage,
-                        isValid: checkResult.hasError === undefined ? undefined : !checkResult.hasError,
-                        value
-                    })
-                }
-            </Component>
-        );
+        const child = fieldCtrl ? React.cloneElement(fieldCtrl, {
+            onChange: this.handleFieldChange.bind(this),
+            onBlur: this.handleBlur.bind(this),
+            errorMessage: checkResult.errorMessage,
+            isValid: checkResult.hasError === undefined ? undefined : !checkResult.hasError,
+            value
+        }) : null;
+
+        return Component ? <Component {...props} > {child}</Component> : child
     }
 }
 
