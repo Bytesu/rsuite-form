@@ -69,20 +69,38 @@ class FarmerJohn extends React.Component {
         this.setState({forceValidation: true});
     }
 
+    handleFormChange(data) {
+        this.setState({ data });
+    }
+
     render() {
         const schema = SchemaModel({
             username: StringType('username required')
-                      .isLongerThan(6, 'username must longer than 6'),
+                      .isLongerThan(6, 'username must longer than 6')
+                      .containsLetter('username should contains one letter at least')
+                      .isRequired(),
             email:    StringType('email required')
-                      .isEmail('no a valid email address')
+                      .isEmail('no a valid email address'),
+            password: StringType('password required')
+                      .isLongerThan(6, 'password must longer than 6')
+                      .containsUppercaseLetter('should contain uppercase letter')
+                      .containsLowercaseLetter('should contain lowercase letter')
+                      .containsNumber('should contain number')
         });
 
         return (
-            <Form model={schema} formData={this.state.data} onChange={() => console.log('form changed')} force={this.state.forceValidation} ref="form">
-                <Field name="username"> <PlainText onChange={() => console.log('username changed')} /> </Field>
-                <Field name="email"> <PlainText onChange={() => console.log('email changed')} /> </Field>
-                <button onClick={this.handleSubmit.bind(this)}>submit</button>
-                <button onClick={this.reset.bind(this)}>reset</button>
+            <Form
+                model={schema}
+                formData={this.state.data}
+                onChange={this.handleFormChange.bind(this)}
+                force={this.state.forceValidation}
+                ref="form"
+                >
+                    <Field name="username"> <PlainText onChange={() => console.log('username changed')} /> </Field>
+                    <Field name="email"> <PlainText onChange={() => console.log('email changed')} /> </Field>
+                    <Field name="password"> <PlainText /> </Field>
+                    <button onClick={this.handleSubmit.bind(this)}>submit</button>
+                    <button onClick={this.reset.bind(this)}>reset</button>
             </Form>
         );
     }
