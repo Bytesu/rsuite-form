@@ -98,6 +98,11 @@ class Field extends React.Component {
         }
     }
 
+    shouldComponentUpdate( nextProps, nextState  ) {
+        return nextProps.value !== this.props.value
+            || nextProps.error !== this.props.error ;
+    }
+
     render() {
         const {value, error, componentClass: Component, ...props} = this.props;
         const fieldCtrl = this.getFieldControl();
